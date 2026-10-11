@@ -843,6 +843,77 @@
   line-height: 1.6;
 }
 
+.gift-action-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 2.2rem auto 2.2rem;
+  padding: 0 1rem;
+}
+
+.btn-gift-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
+  padding: 0.85rem 2rem 0.85rem 1.4rem;
+  background: linear-gradient(135deg, #D18E9B 0%, #B26575 100%);
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 50px;
+  font-family: var(--font-sans);
+  font-size: clamp(0.9rem, 2.5vw, 1.05rem);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  box-shadow: 0 10px 26px rgba(209, 142, 155, 0.38);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+}
+
+.btn-gift-toggle:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 14px 32px rgba(209, 142, 155, 0.5);
+  background: linear-gradient(135deg, #DE9EAA 0%, #BE7080 100%);
+  color: #FFFFFF;
+}
+
+.btn-gift-toggle:active {
+  transform: translateY(-1px) scale(0.99);
+}
+
+.btn-gift-icon-circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.28);
+  font-size: 1.15rem;
+  color: #FFFFFF;
+  transition: transform 0.35s ease;
+  box-shadow: inset 0 0 6px rgba(255, 255, 255, 0.2);
+}
+
+.btn-gift-toggle:hover .btn-gift-icon-circle {
+  transform: rotate(-12deg) scale(1.12);
+}
+
+.btn-gift-text {
+  letter-spacing: 0.3px;
+}
+
+.btn-gift-toggle.active {
+  background: linear-gradient(135deg, #7C666A 0%, #5E4A4E 100%);
+  box-shadow: 0 8px 22px rgba(94, 74, 78, 0.3);
+}
+
+.btn-gift-toggle.active:hover {
+  background: linear-gradient(135deg, #8D7479 0%, #6D565B 100%);
+  box-shadow: 0 10px 26px rgba(94, 74, 78, 0.4);
+}
+
 .gift-cards-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -1515,50 +1586,67 @@
   100% { box-shadow: 0 0 0 0 rgba(209, 142, 155, 0); }
 }
 
-/* Floating Particles (Romantic Vibe Background) */
-.floating-particles {
+/* Floating Hearts (Romantic Vibe Background) */
+.floating-hearts {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   pointer-events: none;
-  z-index: 0;
+  z-index: 1;
   overflow: hidden;
 }
 
-.particle {
+.floating-heart {
   position: absolute;
-  background-color: var(--color-primary);
-  border-radius: 50%;
-  opacity: 0.4;
-  animation: floatUp 15s infinite linear;
-  filter: blur(3px);
+  color: var(--color-primary);
+  opacity: 0;
+  animation: floatHeartUp 18s infinite ease-in-out;
+  filter: drop-shadow(0 2px 5px rgba(209, 142, 155, 0.4));
+  will-change: transform, opacity;
 }
 
-/* Different sizes, positions, and animation speeds */
-.particle.p1 { width: 15px; height: 15px; left: 10%; animation-duration: 18s; animation-delay: 0s; }
-.particle.p2 { width: 25px; height: 25px; left: 30%; animation-duration: 22s; animation-delay: -5s; }
-.particle.p3 { width: 10px; height: 10px; left: 60%; animation-duration: 15s; animation-delay: -2s; }
-.particle.p4 { width: 30px; height: 30px; left: 80%; animation-duration: 25s; animation-delay: -10s; }
-.particle.p5 { width: 18px; height: 18px; left: 50%; animation-duration: 20s; animation-delay: -7s; }
-.particle.p6 { width: 12px; height: 12px; left: 90%; animation-duration: 16s; animation-delay: -4s; }
-.particle.p7 { width: 20px; height: 20px; left: 20%; animation-duration: 24s; animation-delay: -12s; background-color: white; }
-.particle.p8 { width: 14px; height: 14px; left: 70%; animation-duration: 19s; animation-delay: -8s; background-color: white; }
+.floating-heart svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
 
-@keyframes floatUp {
+/* Different sizes, positions, animations, delays and colors */
+.floating-heart.h1 { width: 16px; height: 16px; left: 8%; animation-duration: 18s; animation-delay: 0s; color: var(--color-primary); }
+.floating-heart.h2 { width: 26px; height: 26px; left: 20%; animation-duration: 22s; animation-delay: -4s; color: var(--color-primary-light); }
+.floating-heart.h3 { width: 14px; height: 14px; left: 35%; animation-duration: 16s; animation-delay: -8s; color: #FFFFFF; }
+.floating-heart.h4 { width: 22px; height: 22px; left: 48%; animation-duration: 24s; animation-delay: -12s; color: var(--color-primary); }
+.floating-heart.h5 { width: 18px; height: 18px; left: 62%; animation-duration: 19s; animation-delay: -3s; color: var(--color-primary-light); }
+.floating-heart.h6 { width: 28px; height: 28px; left: 75%; animation-duration: 25s; animation-delay: -9s; color: rgba(255, 255, 255, 0.9); }
+.floating-heart.h7 { width: 15px; height: 15px; left: 86%; animation-duration: 17s; animation-delay: -6s; color: var(--color-primary); }
+.floating-heart.h8 { width: 20px; height: 20px; left: 14%; animation-duration: 21s; animation-delay: -14s; color: var(--color-primary-light); }
+.floating-heart.h9 { width: 12px; height: 12px; left: 42%; animation-duration: 15s; animation-delay: -10s; color: #FFFFFF; }
+.floating-heart.h10 { width: 24px; height: 24px; left: 92%; animation-duration: 23s; animation-delay: -16s; color: var(--color-primary); }
+
+@keyframes floatHeartUp {
   0% {
-    transform: translateY(110vh) translateX(0) scale(0.8);
+    transform: translateY(105vh) translateX(0) rotate(0deg) scale(0.75);
     opacity: 0;
   }
-  20% {
-    opacity: 0.5;
+  15% {
+    opacity: 0.55;
+    transform: translateY(85vh) translateX(14px) rotate(12deg) scale(0.88);
   }
-  80% {
-    opacity: 0.5;
+  45% {
+    opacity: 0.65;
+    transform: translateY(55vh) translateX(-16px) rotate(-14deg) scale(1);
+  }
+  75% {
+    opacity: 0.55;
+    transform: translateY(25vh) translateX(10px) rotate(10deg) scale(1.05);
+  }
+  95% {
+    opacity: 0.35;
   }
   100% {
-    transform: translateY(-20vh) translateX(100px) scale(1.2);
+    transform: translateY(-12vh) translateX(-8px) rotate(-18deg) scale(1.1);
     opacity: 0;
   }
 }

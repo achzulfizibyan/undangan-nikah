@@ -51,6 +51,7 @@ function App() {
   const [likedWishes, setLikedWishes] = useState({});
   const [copiedBank, setCopiedBank] = useState(null);
   const [copiedAlert, setCopiedAlert] = useState(null);
+  const [showGiftCards, setShowGiftCards] = useState(false);
 
   const handleCopyAccount = (number, bankName) => {
     navigator.clipboard.writeText(number).then(() => {
@@ -185,16 +186,18 @@ function App() {
       {/* Main Content */}
       <div className={`main-content ${isOpen ? 'is-open' : ''}`}>
         
-        {/* Floating Particles Animation */}
-        <div className="floating-particles">
-          <div className="particle p1"></div>
-          <div className="particle p2"></div>
-          <div className="particle p3"></div>
-          <div className="particle p4"></div>
-          <div className="particle p5"></div>
-          <div className="particle p6"></div>
-          <div className="particle p7"></div>
-          <div className="particle p8"></div>
+        {/* Floating Hearts Animation (Simbol Hati Melayang) */}
+        <div className="floating-hearts">
+          <div className="floating-heart h1"><FaHeart /></div>
+          <div className="floating-heart h2"><FaHeart /></div>
+          <div className="floating-heart h3"><FaHeart /></div>
+          <div className="floating-heart h4"><FaHeart /></div>
+          <div className="floating-heart h5"><FaHeart /></div>
+          <div className="floating-heart h6"><FaHeart /></div>
+          <div className="floating-heart h7"><FaHeart /></div>
+          <div className="floating-heart h8"><FaHeart /></div>
+          <div className="floating-heart h9"><FaHeart /></div>
+          <div className="floating-heart h10"><FaHeart /></div>
         </div>
 
         {/* Floating Music Button */}
@@ -246,6 +249,26 @@ function App() {
               <p className="location-elegant">
                 DEPAN MASJID DATOK KARAY, DUSUN TENGGINA DESA GELAMAN
               </p>
+            </div>
+          </div>
+        </motion.section>
+
+        {/* Quote Section */}
+        <motion.section 
+          className="section-quote section-padding"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeUp}
+          style={{paddingBottom: '8rem'}}
+        >
+          <div className="container text-center">
+            <div className="glass-card">
+              <FaHeart className="icon-heart gold-accent" style={{fontSize: '1.5rem', marginBottom: '1rem'}} />
+              <p className="quote" style={{fontStyle: 'italic', fontSize: '1.05rem', lineHeight: '1.8', color: 'var(--color-text)'}}>
+                "Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu isteri-isteri dari jenismu sendiri, supaya kamu cenderung dan merasa tenteram kepadanya, dan dijadikan-Nya diantaramu rasa kasih dan sayang. Sesungguhnya pada yang demikian itu benar-benar dapat tanda-tanda bagi kaum yang berfikir."
+              </p>
+              <p className="quote-source gold-accent" style={{marginTop: '1.5rem', fontWeight: '600'}}>(QS. Ar-Rum: 21)</p>
             </div>
           </div>
         </motion.section>
@@ -372,7 +395,7 @@ function App() {
         >
           <div className="container">
             <div className="glass-card text-center" style={{padding: '3rem 1.5rem'}}>
-              <h2 className="section-title script-text gold-accent" style={{fontSize: '3.5rem', marginBottom: '1rem'}}>Ingat Tanggalnya</h2>
+              <h2 className="section-title script-text gold-accent" style={{fontSize: '3.5rem', marginBottom: '1rem'}}>Save The Date</h2>
               
               <div className="date-time-box">
                 <div className="date-time-item">
@@ -421,72 +444,99 @@ function App() {
           <div className="container text-center">
             <div className="gift-header-box">
               <FaGift className="gold-accent gift-icon-main" />
-              <h2 className="gift-heading-title script-text gold-accent">Tanda Kasih</h2>
+              <h2 className="gift-heading-title script-text gold-accent">Kasih Angpao</h2>
               <p className="gift-heading-sub">KIRIM HADIAH / WEDDING GIFT</p>
               <p className="gift-heading-desc italic">
-                Doa restu Anda merupakan karunia terindah bagi kami. Namun jika memberi adalah ungkapan tanda kasih Anda, Anda dapat memberikan kado secara cashless melalui rekening berikut:
+                Doa restu Anda merupakan karunia terindah bagi kami. Namun jika memberi adalah ungkapan tanda kasih Anda, Anda dapat memberikan kado secara cashless melalui:
               </p>
             </div>
 
-            <div className="gift-cards-grid">
-              {/* Rekening BCA */}
-              <div className="bank-card bank-bca">
-                <div className="bank-card-pattern"></div>
-                <div className="bank-card-top">
-                  <span className="bank-logo-text">BCA</span>
-                  <div className="bank-chip"></div>
-                </div>
-                <div className="bank-card-body">
-                  <span className="bank-account-label">Nomor Rekening</span>
-                  <p className="bank-account-number">4980392177</p>
-                  <p className="bank-account-holder">a.n Herman Sugianto</p>
-                </div>
-                <button 
-                  type="button" 
-                  className={`btn-copy-bank ${copiedBank === 'BCA' ? 'copied' : ''}`}
-                  onClick={() => handleCopyAccount('4980392177', 'BCA')}
-                >
-                  {copiedBank === 'BCA' ? (
-                    <>
-                      <FaCheck /> No. Rekening Tersalin
-                    </>
-                  ) : (
-                    <>
-                      <FaCopy /> Salin No. Rekening
-                    </>
-                  )}
-                </button>
-              </div>
-
-              {/* Rekening BANK JATIM */}
-              <div className="bank-card bank-jatim">
-                <div className="bank-card-pattern"></div>
-                <div className="bank-card-top">
-                  <span className="bank-logo-text">BANK JATIM</span>
-                  <div className="bank-chip"></div>
-                </div>
-                <div className="bank-card-body">
-                  <span className="bank-account-label">Nomor Rekening</span>
-                  <p className="bank-account-number">0136077279</p>
-                  <p className="bank-account-holder">a.n Nur Aziziyah</p>
-                </div>
-                <button 
-                  type="button" 
-                  className={`btn-copy-bank ${copiedBank === 'JATIM' ? 'copied' : ''}`}
-                  onClick={() => handleCopyAccount('0136077279', 'BANK JATIM')}
-                >
-                  {copiedBank === 'JATIM' ? (
-                    <>
-                      <FaCheck /> No. Rekening Tersalin
-                    </>
-                  ) : (
-                    <>
-                      <FaCopy /> Salin No. Rekening
-                    </>
-                  )}
-                </button>
-              </div>
+            {/* Tombol Icon Gift untuk Menampilkan Nomor Rekening */}
+            <div className="gift-action-wrap">
+              <button 
+                type="button" 
+                className={`btn-gift-toggle ${showGiftCards ? 'active' : ''}`}
+                onClick={() => setShowGiftCards(!showGiftCards)}
+                aria-expanded={showGiftCards}
+              >
+                <span className="btn-gift-icon-circle">
+                  <FaGift />
+                </span>
+                <span className="btn-gift-text">
+                  {showGiftCards ? 'Sembunyikan Nomor Rekening' : 'Kirim Hadiah / Angpao'}
+                </span>
+              </button>
             </div>
+
+            <AnimatePresence>
+              {showGiftCards && (
+                <motion.div 
+                  className="gift-cards-grid"
+                  initial={{ opacity: 0, y: 20, scale: 0.97 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -15, scale: 0.97 }}
+                  transition={{ duration: 0.35, ease: "easeOut" }}
+                >
+                  {/* Rekening BCA */}
+                  <div className="bank-card bank-bca">
+                    <div className="bank-card-pattern"></div>
+                    <div className="bank-card-top">
+                      <span className="bank-logo-text">BCA</span>
+                      <div className="bank-chip"></div>
+                    </div>
+                    <div className="bank-card-body">
+                      <span className="bank-account-label">Nomor Rekening</span>
+                      <p className="bank-account-number">4980392177</p>
+                      <p className="bank-account-holder">a.n Herman Sugianto</p>
+                    </div>
+                    <button 
+                      type="button" 
+                      className={`btn-copy-bank ${copiedBank === 'BCA' ? 'copied' : ''}`}
+                      onClick={() => handleCopyAccount('4980392177', 'BCA')}
+                    >
+                      {copiedBank === 'BCA' ? (
+                        <>
+                          <FaCheck /> No. Rekening Tersalin
+                        </>
+                      ) : (
+                        <>
+                          <FaCopy /> Salin No. Rekening
+                        </>
+                      )}
+                    </button>
+                  </div>
+
+                  {/* Rekening BANK JATIM */}
+                  <div className="bank-card bank-jatim">
+                    <div className="bank-card-pattern"></div>
+                    <div className="bank-card-top">
+                      <span className="bank-logo-text">BANK JATIM</span>
+                      <div className="bank-chip"></div>
+                    </div>
+                    <div className="bank-card-body">
+                      <span className="bank-account-label">Nomor Rekening</span>
+                      <p className="bank-account-number">0136077279</p>
+                      <p className="bank-account-holder">a.n Nur Aziziyah</p>
+                    </div>
+                    <button 
+                      type="button" 
+                      className={`btn-copy-bank ${copiedBank === 'JATIM' ? 'copied' : ''}`}
+                      onClick={() => handleCopyAccount('0136077279', 'BANK JATIM')}
+                    >
+                      {copiedBank === 'JATIM' ? (
+                        <>
+                          <FaCheck /> No. Rekening Tersalin
+                        </>
+                      ) : (
+                        <>
+                          <FaCopy /> Salin No. Rekening
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
             {copiedAlert && (
               <div className="copy-toast">
@@ -552,7 +602,7 @@ function App() {
                       className={`btn-attendance ${guestData.attendance === 'Tidak Hadir' ? 'active tidak-hadir' : ''}`}
                       onClick={() => setGuestData({ ...guestData, attendance: 'Tidak Hadir' })}
                     >
-                      <FaTimes /> Tidak Hadir
+                      <FaTimes /> Tidak Bisa Hadir
                     </button>
                   </div>
                 </div>
@@ -647,28 +697,8 @@ function App() {
 
             <h3 className="host-title" style={{fontFamily: 'var(--font-serif)', fontSize: '1.8rem', marginBottom: '1.5rem'}}>Kami Yang Berbahagia</h3>
             <div className="happy-family">
-              <p>Kel. Bapak Matli & Ibu Mainna</p>
-              <p>Kel. Bapak Busari & Ibu Sutiama</p>
-            </div>
-          </div>
-        </motion.section>
-
-        {/* Quote Section */}
-        <motion.section 
-          className="section-quote section-padding"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          variants={fadeUp}
-          style={{paddingBottom: '8rem'}}
-        >
-          <div className="container text-center">
-            <div className="glass-card">
-              <FaHeart className="icon-heart gold-accent" style={{fontSize: '1.5rem', marginBottom: '1rem'}} />
-              <p className="quote" style={{fontStyle: 'italic', fontSize: '1.05rem', lineHeight: '1.8', color: 'var(--color-text)'}}>
-                "Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu isteri-isteri dari jenismu sendiri, supaya kamu cenderung dan merasa tenteram kepadanya, dan dijadikan-Nya diantaramu rasa kasih dan sayang. Sesungguhnya pada yang demikian itu benar-benar dapat tanda-tanda bagi kaum yang berfikir."
-              </p>
-              <p className="quote-source gold-accent" style={{marginTop: '1.5rem', fontWeight: '600'}}>(QS. Ar-Rum: 21)</p>
+              <p>Keluarga Bapak Matli & Ibu Mainna</p>
+              <p>Keluarga Bapak Busari & Ibu Sutiama</p>
             </div>
           </div>
         </motion.section>
