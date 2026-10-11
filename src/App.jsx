@@ -32,39 +32,12 @@ function App() {
     seconds: 0
   });
 
-  const defaultWishes = [
-    {
-      id: 1,
-      name: "Ahmad Fauzi & Keluarga",
-      status: "Hadir",
-      message: "Barakallahu lakum wa baraka alaikum. Selamat menempuh hidup baru Herman & Zizi, semoga menjadi keluarga sakinah, mawaddah, warahmah.",
-      time: "1 jam yang lalu",
-      likes: 6
-    },
-    {
-      id: 2,
-      name: "Siti Rahmawati",
-      status: "Hadir",
-      message: "Selamat berbahagia ya Zizi & Mas Herman! Semoga senantiasa dilimpahkan keberkahan dan kebahagiaan dalam rumah tangga.",
-      time: "3 jam yang lalu",
-      likes: 4
-    },
-    {
-      id: 3,
-      name: "Budi Santoso",
-      status: "Tidak Hadir",
-      message: "Selamat atas pernikahannya Herman & Zizi. Mohon maaf belum bisa hadir langsung karena dinas ke luar kota, doa terbaik untuk kalian berdua!",
-      time: "5 jam yang lalu",
-      likes: 2
-    }
-  ];
-
   const [wishesList, setWishesList] = useState(() => {
     try {
-      const saved = localStorage.getItem('wedding_wishes_herman');
-      return saved ? JSON.parse(saved) : defaultWishes;
+      const saved = localStorage.getItem('wedding_guestbook_herman');
+      return saved ? JSON.parse(saved) : [];
     } catch {
-      return defaultWishes;
+      return [];
     }
   });
 
@@ -126,7 +99,7 @@ function App() {
     const updated = [newWish, ...wishesList];
     setWishesList(updated);
     try {
-      localStorage.setItem('wedding_wishes_herman', JSON.stringify(updated));
+      localStorage.setItem('wedding_guestbook_herman', JSON.stringify(updated));
     } catch (err) {}
 
     setGuestData({
@@ -433,15 +406,13 @@ function App() {
           variants={fadeUp}
         >
           <div className="container text-center">
-            <div className="rsvp-header">
-              <span className="rsvp-please script-text">Guestbook</span>
-              <h2 className="rsvp-title">Buku Tamu & Ucapan</h2>
+            <div className="guestbook-header-box">
+              <h2 className="guestbook-heading-title script-text gold-accent">Buku Tamu &amp; Ucapan</h2>
+              <p className="guestbook-heading-sub">KONFIRMASI KEHADIRAN &amp; DOA RESTU</p>
+              <p className="guestbook-heading-desc italic">
+                Kehadiran dan doa restu Anda adalah kebahagiaan terbesar bagi kami
+              </p>
             </div>
-            
-            <p className="rsvp-subtitle">KONFIRMASI KEHADIRAN & DOA RESTU</p>
-            <p className="rsvp-desc italic">
-              Kehadiran dan untaian doa tulus Anda adalah kado terindah bagi hari bahagia kami
-            </p>
             
             <div className="guestbook-card-container">
               {submittedAlert && (
@@ -518,35 +489,41 @@ function App() {
                 </div>
 
                 <div className="social-comments-list">
-                  {wishesList.map((wish) => (
-                    <div key={wish.id} className="social-comment-item">
-                      <div className="social-comment-avatar">
-                        {wish.name ? wish.name.charAt(0).toUpperCase() : 'T'}
-                      </div>
-                      <div className="social-comment-content">
-                        <div className="social-comment-bubble">
-                          <div className="social-comment-user-row">
-                            <span className="social-comment-username">{wish.name}</span>
-                            <span className={`social-attendance-tag ${wish.status === 'Hadir' ? 'tag-hadir' : 'tag-absen'}`}>
-                              {wish.status === 'Hadir' ? '✓ Hadir' : '✕ Tidak Hadir'}
-                            </span>
-                          </div>
-                          <p className="social-comment-text">{wish.message}</p>
-                        </div>
-                        <div className="social-comment-meta">
-                          <span className="social-comment-time">{wish.time}</span>
-                          <button 
-                            type="button" 
-                            className={`social-like-btn ${likedWishes[wish.id] ? 'is-liked' : ''}`}
-                            onClick={() => handleToggleLike(wish.id)}
-                          >
-                            <FaHeart className={likedWishes[wish.id] ? 'heart-liked' : ''} />
-                            <span>{(wish.likes || 0) + (likedWishes[wish.id] ? 1 : 0)} Suka</span>
-                          </button>
-                        </div>
-                      </div>
+                  {wishesList.length === 0 ? (
+                    <div className="empty-comments-state">
+                      <p>Belum ada ucapan. Jadilah yang pertama memberikan ucapan & doa restu!</p>
                     </div>
-                  ))}
+                  ) : (
+                    wishesList.map((wish) => (
+                      <div key={wish.id} className="social-comment-item">
+                        <div className="social-comment-avatar">
+                          {wish.name ? wish.name.charAt(0).toUpperCase() : 'T'}
+                        </div>
+                        <div className="social-comment-content">
+                          <div className="social-comment-bubble">
+                            <div className="social-comment-user-row">
+                              <span className="social-comment-username">{wish.name}</span>
+                              <span className={`social-attendance-tag ${wish.status === 'Hadir' ? 'tag-hadir' : 'tag-absen'}`}>
+                                {wish.status === 'Hadir' ? '✓ Hadir' : '✕ Tidak Hadir'}
+                              </span>
+                            </div>
+                            <p className="social-comment-text">{wish.message}</p>
+                          </div>
+                          <div className="social-comment-meta">
+                            <span className="social-comment-time">{wish.time}</span>
+                            <button 
+                              type="button" 
+                              className={`social-like-btn ${likedWishes[wish.id] ? 'is-liked' : ''}`}
+                              onClick={() => handleToggleLike(wish.id)}
+                            >
+                              <FaHeart className={likedWishes[wish.id] ? 'heart-liked' : ''} />
+                              <span>{(wish.likes || 0) + (likedWishes[wish.id] ? 1 : 0)} Suka</span>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    ))
+                  )}
                 </div>
               </div>
             </div>
