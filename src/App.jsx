@@ -235,7 +235,7 @@ function App() {
               <div className="profile-info">
                 <div className="short-line"></div>
                 <h2 className="profile-name">HERMAN SUGIANTO, S.H. M.Pd</h2>
-                <p className="profile-relation">PUTRA KEDUA DARI</p>
+                <p className="profile-relation">PUTRA PERTAMA DARI</p>
                 <p className="profile-parents">Bapak Matli & Ibu Mainna</p>
               </div>
             </motion.div>
@@ -251,7 +251,7 @@ function App() {
               <div className="profile-info align-right">
                 <div className="short-line right"></div>
                 <h2 className="profile-name">NUR AZIZIYAH, S.Pd</h2>
-                <p className="profile-relation">PUTRI PERTAMA DARI</p>
+                <p className="profile-relation">PUTRI KEDUA DARI</p>
                 <p className="profile-parents">Bapak Busari &amp; Ibu Sutiama</p>
               </div>
               <div className="profile-image-wrapper">
