@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaCalendarAlt, FaMapMarkerAlt, FaEnvelopeOpenText, FaMusic, FaPause, FaImages, FaMap, FaHeart, FaCheck, FaTimes, FaComments, FaPaperPlane } from 'react-icons/fa';
+import { FaCalendarAlt, FaMapMarkerAlt, FaEnvelopeOpenText, FaMusic, FaPause, FaImages, FaMap, FaHeart, FaCheck, FaTimes, FaComments, FaPaperPlane, FaGift, FaCopy } from 'react-icons/fa';
 import './App.css';
 import hermanImg from './assets/herman.png';
 import ziziImg from './assets/zizi.png';
@@ -49,6 +49,19 @@ function App() {
 
   const [submittedAlert, setSubmittedAlert] = useState(false);
   const [likedWishes, setLikedWishes] = useState({});
+  const [copiedBank, setCopiedBank] = useState(null);
+  const [copiedAlert, setCopiedAlert] = useState(null);
+
+  const handleCopyAccount = (number, bankName) => {
+    navigator.clipboard.writeText(number).then(() => {
+      setCopiedBank(bankName);
+      setCopiedAlert(bankName);
+      setTimeout(() => setCopiedBank(null), 3000);
+      setTimeout(() => setCopiedAlert(null), 3000);
+    }).catch(err => {
+      console.error('Failed to copy: ', err);
+    });
+  };
 
   const handleToggleLike = (id) => {
     setLikedWishes((prev) => ({
@@ -394,6 +407,92 @@ function App() {
                 </a>
               </div>
             </div>
+          </div>
+        </motion.section>
+
+        {/* Wedding Gift Section (Tanda Kasih) */}
+        <motion.section 
+          className="section-gift section-padding bg-darker"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.15 }}
+          variants={fadeUp}
+        >
+          <div className="container text-center">
+            <div className="gift-header-box">
+              <FaGift className="gold-accent gift-icon-main" />
+              <h2 className="gift-heading-title script-text gold-accent">Tanda Kasih</h2>
+              <p className="gift-heading-sub">KIRIM HADIAH / WEDDING GIFT</p>
+              <p className="gift-heading-desc italic">
+                Doa restu Anda merupakan karunia terindah bagi kami. Namun jika memberi adalah ungkapan tanda kasih Anda, Anda dapat memberikan kado secara cashless melalui rekening berikut:
+              </p>
+            </div>
+
+            <div className="gift-cards-grid">
+              {/* Rekening BCA */}
+              <div className="bank-card bank-bca">
+                <div className="bank-card-pattern"></div>
+                <div className="bank-card-top">
+                  <span className="bank-logo-text">BCA</span>
+                  <div className="bank-chip"></div>
+                </div>
+                <div className="bank-card-body">
+                  <span className="bank-account-label">Nomor Rekening</span>
+                  <p className="bank-account-number">4980392177</p>
+                  <p className="bank-account-holder">a.n Herman Sugianto</p>
+                </div>
+                <button 
+                  type="button" 
+                  className={`btn-copy-bank ${copiedBank === 'BCA' ? 'copied' : ''}`}
+                  onClick={() => handleCopyAccount('4980392177', 'BCA')}
+                >
+                  {copiedBank === 'BCA' ? (
+                    <>
+                      <FaCheck /> No. Rekening Tersalin
+                    </>
+                  ) : (
+                    <>
+                      <FaCopy /> Salin No. Rekening
+                    </>
+                  )}
+                </button>
+              </div>
+
+              {/* Rekening BANK JATIM */}
+              <div className="bank-card bank-jatim">
+                <div className="bank-card-pattern"></div>
+                <div className="bank-card-top">
+                  <span className="bank-logo-text">BANK JATIM</span>
+                  <div className="bank-chip"></div>
+                </div>
+                <div className="bank-card-body">
+                  <span className="bank-account-label">Nomor Rekening</span>
+                  <p className="bank-account-number">0136077279</p>
+                  <p className="bank-account-holder">a.n Nur Aziziyah</p>
+                </div>
+                <button 
+                  type="button" 
+                  className={`btn-copy-bank ${copiedBank === 'JATIM' ? 'copied' : ''}`}
+                  onClick={() => handleCopyAccount('0136077279', 'BANK JATIM')}
+                >
+                  {copiedBank === 'JATIM' ? (
+                    <>
+                      <FaCheck /> No. Rekening Tersalin
+                    </>
+                  ) : (
+                    <>
+                      <FaCopy /> Salin No. Rekening
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+
+            {copiedAlert && (
+              <div className="copy-toast">
+                <FaCheck /> Nomor rekening {copiedAlert} berhasil disalin!
+              </div>
+            )}
           </div>
         </motion.section>
 
