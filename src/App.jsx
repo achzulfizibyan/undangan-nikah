@@ -1,7 +1,9 @@
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaCalendarAlt, FaMapMarkerAlt, FaEnvelopeOpenText, FaMusic, FaPause, FaImages, FaMap, FaHeart } from 'react-icons/fa';
+import { FaCalendarAlt, FaMapMarkerAlt, FaEnvelopeOpenText, FaMusic, FaPause, FaImages, FaMap, FaHeart, FaCheck, FaTimes, FaComments, FaPaperPlane } from 'react-icons/fa';
 import './App.css';
+import hermanImg from './assets/herman.png';
+import ziziImg from './assets/zizi.png';
 
 const fadeUp = {
   hidden: { opacity: 0, y: 50 },
@@ -30,10 +32,57 @@ function App() {
     seconds: 0
   });
 
-  const [rsvpData, setRsvpData] = useState({
-    name: '',
-    status: ''
+  const defaultWishes = [
+    {
+      id: 1,
+      name: "Ahmad Fauzi & Keluarga",
+      status: "Hadir",
+      message: "Barakallahu lakum wa baraka alaikum. Selamat menempuh hidup baru Herman & Zizi, semoga menjadi keluarga sakinah, mawaddah, warahmah.",
+      time: "1 jam yang lalu",
+      likes: 6
+    },
+    {
+      id: 2,
+      name: "Siti Rahmawati",
+      status: "Hadir",
+      message: "Selamat berbahagia ya Zizi & Mas Herman! Semoga senantiasa dilimpahkan keberkahan dan kebahagiaan dalam rumah tangga.",
+      time: "3 jam yang lalu",
+      likes: 4
+    },
+    {
+      id: 3,
+      name: "Budi Santoso",
+      status: "Tidak Hadir",
+      message: "Selamat atas pernikahannya Herman & Zizi. Mohon maaf belum bisa hadir langsung karena dinas ke luar kota, doa terbaik untuk kalian berdua!",
+      time: "5 jam yang lalu",
+      likes: 2
+    }
+  ];
+
+  const [wishesList, setWishesList] = useState(() => {
+    try {
+      const saved = localStorage.getItem('wedding_wishes_herman');
+      return saved ? JSON.parse(saved) : defaultWishes;
+    } catch {
+      return defaultWishes;
+    }
   });
+
+  const [guestData, setGuestData] = useState({
+    name: '',
+    attendance: 'Hadir',
+    message: ''
+  });
+
+  const [submittedAlert, setSubmittedAlert] = useState(false);
+  const [likedWishes, setLikedWishes] = useState({});
+
+  const handleToggleLike = (id) => {
+    setLikedWishes((prev) => ({
+      ...prev,
+      [id]: !prev[id]
+    }));
+  };
 
   React.useEffect(() => {
     const targetDate = new Date("2026-10-29T07:00:00").getTime();
@@ -58,37 +107,36 @@ function App() {
     return () => clearInterval(interval);
   }, []);
 
-  const handleRSVPSubmit = (e) => {
+  const handleGuestbookSubmit = (e) => {
     e.preventDefault();
-    if (!rsvpData.name || !rsvpData.status) {
-      alert('Mohon isi nama dan konfirmasi kehadiran Anda.');
-      return;
-    }
-    
-    const phoneNumber = '6282335137684';
-    const message = `Halo, saya ${rsvpData.name} ingin mengkonfirmasi kehadiran pada acara pernikahan Herman & Zizi.\n\nStatus: ${rsvpData.status}\n\nTerima kasih.`;
-    const encodedMessage = encodeURIComponent(message);
-    
-    window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`, '_blank');
-  };
-
-  const [wishesData, setWishesData] = useState({
-    name: '',
-    message: ''
-  });
-
-  const handleWishesSubmit = (e) => {
-    e.preventDefault();
-    if (!wishesData.name || !wishesData.message) {
+    if (!guestData.name.trim() || !guestData.message.trim()) {
       alert('Mohon isi nama dan ucapan Anda.');
       return;
     }
 
-    const phoneNumber = '6282335137684';
-    const message = `Halo, saya ${wishesData.name} ingin memberikan ucapan & doa untuk pernikahan Herman & Zizi:\n\n"${wishesData.message}"\n\n*(Tolong lampirkan foto Anda di chat ini)*\n\nTerima kasih.`;
-    const encodedMessage = encodeURIComponent(message);
-    
-    window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`, '_blank');
+    const newWish = {
+      id: Date.now(),
+      name: guestData.name.trim(),
+      status: guestData.attendance,
+      message: guestData.message.trim(),
+      time: 'Baru saja',
+      likes: 0
+    };
+
+    const updated = [newWish, ...wishesList];
+    setWishesList(updated);
+    try {
+      localStorage.setItem('wedding_wishes_herman', JSON.stringify(updated));
+    } catch (err) {}
+
+    setGuestData({
+      name: '',
+      attendance: 'Hadir',
+      message: ''
+    });
+
+    setSubmittedAlert(true);
+    setTimeout(() => setSubmittedAlert(false), 4000);
   };
 
   const handleOpenInvitation = () => {
@@ -229,7 +277,7 @@ function App() {
             <motion.div className="profile-card groom-card" variants={fadeUp}>
               <div className="profile-image-wrapper">
                 <div className="hexagon-img">
-                  <img src="https://images.unsplash.com/photo-1550005809-91ad75fb315f?q=80&w=500&auto=format&fit=crop" alt="Groom" />
+                  <img src={hermanImg} alt="Groom" />
                 </div>
               </div>
               <div className="profile-info">
@@ -256,7 +304,7 @@ function App() {
               </div>
               <div className="profile-image-wrapper">
                 <div className="hexagon-img">
-                  <img src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=500&auto=format&fit=crop" alt="Bride" />
+                  <img src={ziziImg} alt="Bride" />
                 </div>
               </div>
             </motion.div>
@@ -359,16 +407,16 @@ function App() {
                 <h3 style={{fontFamily: 'var(--font-serif)', fontSize: '1.8rem', marginBottom: '1.5rem'}}>Lokasi Acara</h3>
                 <div className="map-container" style={{borderRadius: '15px', overflow: 'hidden', boxShadow: '0 4px 15px rgba(0,0,0,0.1)'}}>
                   <iframe 
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15838.0820067635!2d114.077221!3d-7.06453!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd9e43df3d5bc61%3A0x600115cd1db98b7!2sGelaman%2C%20Arjasa%2C%20Sumenep%20Regency%2C%20East%20Java!5e0!3m2!1sen!2sid!4v1700000000000!5m2!1sen!2sid" 
+                    src="https://maps.google.com/maps?q=-6.8912565,115.3164412&hl=id&z=17&output=embed" 
                     width="100%" 
-                    height="300" 
+                    height="350" 
                     style={{border:0}} 
                     allowFullScreen="" 
                     loading="lazy" 
                     referrerPolicy="no-referrer-when-downgrade">
                   </iframe>
                 </div>
-                <a href="https://maps.app.goo.gl/dummyLink" target="_blank" rel="noopener noreferrer" className="btn-primary" style={{marginTop: '1.5rem', display: 'inline-block'}}>
+                <a href="https://www.google.com/maps/search/?api=1&query=-6.8912565,115.3164412" target="_blank" rel="noopener noreferrer" className="btn-primary" style={{marginTop: '1.5rem', display: 'inline-block'}}>
                   <FaMap style={{marginRight: '8px'}} /> Buka Google Maps
                 </a>
               </div>
@@ -376,74 +424,132 @@ function App() {
           </div>
         </motion.section>
 
-        {/* RSVP Section */}
+        {/* Buku Tamu dan Ucapan Section */}
         <motion.section 
-          className="section-rsvp section-padding"
+          className="section-guestbook section-padding"
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
+          viewport={{ once: true, amount: 0.15 }}
           variants={fadeUp}
         >
           <div className="container text-center">
             <div className="rsvp-header">
-              <span className="rsvp-please script-text">Please</span>
-              <h2 className="rsvp-title">RSVP</h2>
-              <img src="/cupid.png" alt="" className="rsvp-decor" style={{display: 'none'}} />
+              <span className="rsvp-please script-text">Guestbook</span>
+              <h2 className="rsvp-title">Buku Tamu & Ucapan</h2>
             </div>
             
-            <p className="rsvp-subtitle">MOHON KONFIRMASI KEHADIRAN ANDA</p>
+            <p className="rsvp-subtitle">KONFIRMASI KEHADIRAN & DOA RESTU</p>
             <p className="rsvp-desc italic">
-              Kehadiran dan doa restu Anda adalah kebahagiaan terbesar bagi kami
+              Kehadiran dan untaian doa tulus Anda adalah kado terindah bagi hari bahagia kami
             </p>
             
-            <form className="rsvp-form" onSubmit={handleRSVPSubmit}>
-              <div className="form-group">
-                <input 
-                  type="text" 
-                  className="form-control" 
-                  placeholder="Nama lengkap" 
-                  value={rsvpData.name}
-                  onChange={(e) => setRsvpData({...rsvpData, name: e.target.value})}
-                  required
-                />
-              </div>
-              
-              <div className="form-group text-left">
-                <p className="form-label">Konfirmasi kehadiran</p>
-                <label className="radio-label">
+            <div className="guestbook-card-container">
+              {submittedAlert && (
+                <div className="submit-alert-success">
+                  <FaCheck style={{ marginRight: '6px' }} />
+                  Terima kasih! Ucapan Anda telah ditambahkan di bawah.
+                </div>
+              )}
+
+              <form className="guestbook-form" onSubmit={handleGuestbookSubmit}>
+                {/* 1. Input Nama */}
+                <div className="form-field">
+                  <label htmlFor="guest-name">Nama Tamu</label>
                   <input 
-                    type="radio" 
-                    name="status" 
-                    value="Iya, saya akan datang"
-                    checked={rsvpData.status === 'Iya, saya akan datang'}
-                    onChange={(e) => setRsvpData({...rsvpData, status: e.target.value})}
+                    id="guest-name"
+                    type="text" 
+                    className="guestbook-input" 
+                    placeholder="Tuliskan nama Anda..." 
+                    value={guestData.name}
+                    onChange={(e) => setGuestData({ ...guestData, name: e.target.value })}
                     required
                   />
-                  <span className="radio-custom"></span>
-                  Bisa hadir
-                </label>
-                <label className="radio-label">
-                  <input 
-                    type="radio" 
-                    name="status" 
-                    value="Maaf, Sepertinya tidak bisa"
-                    checked={rsvpData.status === 'Maaf, Sepertinya tidak bisa'}
-                    onChange={(e) => setRsvpData({...rsvpData, status: e.target.value})}
-                  />
-                  <span className="radio-custom"></span>
-                    Tidak bisa hadir
-                </label>
+                </div>
+                
+                {/* 2. Tombol Hadir atau Tidak */}
+                <div className="form-field">
+                  <label>Konfirmasi Kehadiran</label>
+                  <div className="attendance-buttons">
+                    <button
+                      type="button"
+                      className={`btn-attendance ${guestData.attendance === 'Hadir' ? 'active hadir' : ''}`}
+                      onClick={() => setGuestData({ ...guestData, attendance: 'Hadir' })}
+                    >
+                      <FaCheck /> Hadir
+                    </button>
+                    <button
+                      type="button"
+                      className={`btn-attendance ${guestData.attendance === 'Tidak Hadir' ? 'active tidak-hadir' : ''}`}
+                      onClick={() => setGuestData({ ...guestData, attendance: 'Tidak Hadir' })}
+                    >
+                      <FaTimes /> Tidak Hadir
+                    </button>
+                  </div>
+                </div>
+
+                {/* 3. Text Area Ucapan */}
+                <div className="form-field">
+                  <label htmlFor="guest-message">Ucapan & Doa</label>
+                  <textarea 
+                    id="guest-message"
+                    className="guestbook-textarea" 
+                    placeholder="Tuliskan ucapan dan doa terbaik untuk kedua mempelai..." 
+                    rows="3"
+                    value={guestData.message}
+                    onChange={(e) => setGuestData({ ...guestData, message: e.target.value })}
+                    required
+                  ></textarea>
+                </div>
+                
+                {/* 4. Tombol Kirim */}
+                <button type="submit" className="btn-guestbook-submit">
+                  <FaPaperPlane />
+                  KIRIM UCAPAN
+                </button>
+              </form>
+
+              {/* 5. Daftar Komentar / Ucapan ala Sosial Media (Tepat di bawah tombol) */}
+              <div className="social-comments-section">
+                <div className="social-comments-header">
+                  <div className="comments-count-title">
+                    <FaComments className="gold-accent" />
+                    <span>{wishesList.length} Komentar & Ucapan</span>
+                  </div>
+                </div>
+
+                <div className="social-comments-list">
+                  {wishesList.map((wish) => (
+                    <div key={wish.id} className="social-comment-item">
+                      <div className="social-comment-avatar">
+                        {wish.name ? wish.name.charAt(0).toUpperCase() : 'T'}
+                      </div>
+                      <div className="social-comment-content">
+                        <div className="social-comment-bubble">
+                          <div className="social-comment-user-row">
+                            <span className="social-comment-username">{wish.name}</span>
+                            <span className={`social-attendance-tag ${wish.status === 'Hadir' ? 'tag-hadir' : 'tag-absen'}`}>
+                              {wish.status === 'Hadir' ? '✓ Hadir' : '✕ Tidak Hadir'}
+                            </span>
+                          </div>
+                          <p className="social-comment-text">{wish.message}</p>
+                        </div>
+                        <div className="social-comment-meta">
+                          <span className="social-comment-time">{wish.time}</span>
+                          <button 
+                            type="button" 
+                            className={`social-like-btn ${likedWishes[wish.id] ? 'is-liked' : ''}`}
+                            onClick={() => handleToggleLike(wish.id)}
+                          >
+                            <FaHeart className={likedWishes[wish.id] ? 'heart-liked' : ''} />
+                            <span>{(wish.likes || 0) + (likedWishes[wish.id] ? 1 : 0)} Suka</span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
-              
-              <button type="submit" className="btn-submit">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{marginRight: '8px', verticalAlign: 'middle'}}>
-                  <path d="M12 21V11M12 11L8.5 14.5M12 11L15.5 14.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M19 21V9.5C19 8.39543 18.1046 7.5 17 7.5H16M5 21V9.5C5 8.39543 5.89543 7.5 7 7.5H8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M15 7.5V5C15 3.89543 14.1046 3 13 3H11C9.89543 3 9 3.89543 9 5V7.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-                KIRIM RESPON
-              </button>
-            </form>
+            </div>
           </div>
         </motion.section>
 
@@ -468,73 +574,6 @@ function App() {
               <p>Kel. Bapak Matli & Ibu Mainna</p>
               <p>Kel. Bapak Busari & Ibu Sutiama</p>
             </div>
-          </div>
-        </motion.section>
-
-        {/* Wishes Section */}
-        <motion.section 
-          className="section-wishes section-padding"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-          variants={fadeUp}
-        >
-          <div className="container text-center">
-            <div className="rsvp-header">
-              <h2 className="rsvp-title">Ucapan & Doa</h2>
-            </div>
-            
-            <p className="rsvp-subtitle">KIRIMKAN DOA RESTU ANDA</p>
-            <p className="rsvp-desc italic">
-              Doa tulus Anda sangat berarti bagi perjalanan baru kami
-            </p>
-            
-            <form className="rsvp-form" onSubmit={handleWishesSubmit}>
-              <div className="form-group">
-                <input 
-                  type="text" 
-                  className="form-control" 
-                  placeholder="Nama Anda" 
-                  value={wishesData.name}
-                  onChange={(e) => setWishesData({...wishesData, name: e.target.value})}
-                  required
-                />
-              </div>
-              
-              <div className="form-group">
-                <p className="form-label text-left" style={{marginBottom: '0.5rem', fontSize: '1rem', color: '#888'}}>Lampirkan Foto (Opsional)</p>
-                <input 
-                  type="file" 
-                  className="form-control" 
-                  accept="image/*"
-                  style={{padding: '0.5rem 0', fontSize: '0.9rem'}}
-                />
-                <p style={{fontSize: '0.8rem', color: '#A0A0A0', textAlign: 'left', marginTop: '0.5rem', fontStyle: 'italic'}}>
-                  *Foto tidak dapat terkirim otomatis lewat web, mohon kirimkan ulang foto Anda di chat WhatsApp setelah menekan tombol kirim.
-                </p>
-              </div>
-
-              <div className="form-group">
-                <textarea 
-                  className="form-control" 
-                  placeholder="Tuliskan ucapan dan doa untuk kedua mempelai..." 
-                  rows="4"
-                  value={wishesData.message}
-                  onChange={(e) => setWishesData({...wishesData, message: e.target.value})}
-                  required
-                  style={{resize: 'vertical'}}
-                ></textarea>
-              </div>
-              
-              <button type="submit" className="btn-submit" style={{background: '#D18E9B'}}>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{marginRight: '8px', verticalAlign: 'middle'}}>
-                  <path d="M12 21V11M12 11L8.5 14.5M12 11L15.5 14.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M19 21V9.5C19 8.39543 18.1046 7.5 17 7.5H16M5 21V9.5C5 8.39543 5.89543 7.5 7 7.5H8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M15 7.5V5C15 3.89543 14.1046 3 13 3H11C9.89543 3 9 3.89543 9 5V7.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-                KIRIM UCAPAN
-              </button>
-            </form>
           </div>
         </motion.section>
 
