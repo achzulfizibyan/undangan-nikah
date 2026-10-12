@@ -240,7 +240,7 @@ function App() {
                 </div>
                 <div className="date-side date-right">
                   <span>PUKUL</span>
-                  <span>07.00 - SELESAI</span>
+                  <span>07.00 WIB - SELESAI</span>
                 </div>
               </div>
               
@@ -294,6 +294,7 @@ function App() {
                 <h2 className="profile-name">HERMAN SUGIANTO, S.H. M.Pd</h2>
                 <p className="profile-relation">PUTRA PERTAMA DARI</p>
                 <p className="profile-parents">Bapak Matli & Ibu Mainna</p>
+                <p className="profile-parents">Desa Gelaman, Arjasa - Sumenep</p>
               </div>
             </motion.div>
             
@@ -309,7 +310,8 @@ function App() {
                 <div className="short-line right"></div>
                 <h2 className="profile-name">NUR AZIZIYAH, S.Pd</h2>
                 <p className="profile-relation">PUTRI KEDUA DARI</p>
-                <p className="profile-parents">Bapak Busari &amp; Ibu Sutiama</p>
+                <p className="profile-parents">Bapak Busri &amp; Ibu Sutiama</p>
+                <p className="profile-parents">Desa Pondok Kelor, Paiton - Probolinggo</p>
               </div>
               <div className="profile-image-wrapper">
                 <div className="hexagon-img">
